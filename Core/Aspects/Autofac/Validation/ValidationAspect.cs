@@ -9,11 +9,12 @@ using System.Text;
 
 namespace Core.Aspects.Autofac.Validation
 {
-	public class ValidationAspect : MethodInterception
+	public class ValidationAspect : MethodInterception //Aspect
 	{
 		private Type _validatorType;
 		public ValidationAspect(Type validatorType)
 		{
+			//defensive coding --> check if given type is not validator type
 			if (!typeof(IValidator).IsAssignableFrom(validatorType))
 			{
 				throw new System.Exception("Bu Bir Doğrulama Sınıfı Değildir!");
@@ -21,6 +22,8 @@ namespace Core.Aspects.Autofac.Validation
 
 			_validatorType = validatorType;
 		}
+
+		//Run Invocation to before the method
 		protected override void OnBefore(IInvocation invocation)
 		{
 			var validator = (IValidator)Activator.CreateInstance(_validatorType);
